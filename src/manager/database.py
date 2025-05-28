@@ -34,8 +34,7 @@ class Database:
             VALUE INTEGER NOT NULL CHECK(VALUE IN (0, 1))
             );"""
         )
-        await self.database.execute(
-            "CREATE TABLE IF NOT EXISTS download_data (ID TEXT PRIMARY KEY);"
+        await self.database.execute("CREATE TABLE IF NOT EXISTS download_data (ID TEXT PRIMARY KEY,TIME TEXT NOT NULL);"
         )
         await self.database.execute("""CREATE TABLE IF NOT EXISTS mapping_data (
         ID TEXT PRIMARY KEY,
@@ -45,6 +44,10 @@ class Database:
         await self.database.execute("""CREATE TABLE IF NOT EXISTS option_data (
         NAME TEXT PRIMARY KEY,
         VALUE TEXT NOT NULL
+        );""")
+        await self.database.execute("""CREATE TABLE IF NOT EXISTS links (
+        LINK TEXT PRIMARY KEY,
+        TIME TEXT NOT NULL
         );""")
 
     async def __write_default_config(self):
@@ -103,8 +106,15 @@ class Database:
         return bool(await self.cursor.fetchone())
 
     async def write_download_data(self, id_: str):
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         await self.database.execute(
-            "INSERT OR IGNORE INTO download_data (ID) VALUES (?);", (id_,)
+            "INSERT OR IGNORE INTO download_data (ID, TIME) VALUES (?,?);", (id_, current_time,)
+        )
+        await self.database.commit()
+    async def write_links(self, link: str):
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        await self.database.execute(
+            "INSERT OR IGNORE INTO links (LINK, TIME) VALUES (?,?);", (link, current_time,)
         )
         await self.database.commit()
 

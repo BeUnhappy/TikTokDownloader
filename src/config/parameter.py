@@ -45,6 +45,7 @@ class Parameter:
         "uid",
         "mark",
         "type",
+        "unique_id",
     )
     CLEANER = Cleaner()
     HEADERS = {"User-Agent": USERAGENT}
@@ -384,10 +385,10 @@ class Parameter:
         else:
             self.logger.warning(
                 _(
-                    "name_format 参数 {name_format} 设置错误，程序将使用默认值：创建时间 作品类型 账号昵称 作品描述"
+                    "name_format 参数 {name_format} 设置错误，程序将使用默认值：创建时间 作品类型 账号昵称 抖音号 作品描述"
                 ).format(name_format=name_format)
             )
-            return ["create_time", "type", "nickname", "desc"]
+            return ["create_time", "type", "nickname", "unique_id", "desc"]
 
     def __check_date_format(self, date_format: str) -> str:
         try:
