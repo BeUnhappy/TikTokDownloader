@@ -3,6 +3,8 @@ from contextlib import suppress
 
 from aiosqlite import Row, connect
 
+from datetime import datetime
+
 from ..custom import PROJECT_ROOT
 
 __all__ = ["Database"]
